@@ -1,81 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Wallet Balance</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JARVINO Wallet</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f5;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6fa;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      margin: 0;
     }
 
-    .container {
-      background: white;
+    .card {
+      background: #fff;
       padding: 30px 40px;
       border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
       text-align: center;
+      width: 90%;
+      max-width: 400px;
     }
 
-    h1 {
+    h2 {
+      color: #1e90ff;
+    }
+
+    .balance {
+      font-size: 24px;
       color: #333;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
-    button {
-      padding: 12px 25px;
+    .coin-logo {
+      width: 30px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    .copy-btn {
+      padding: 10px 20px;
       background-color: #1e90ff;
       color: white;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 16px;
     }
 
-    button:hover {
-      background-color: #0077cc;
+    .copy-btn:active {
+      background-color: #0078cc;
     }
 
-    #balanceOutput {
+    .footer {
+      font-size: 12px;
       margin-top: 25px;
-      font-size: 20px;
-      color: #222;
+      color: #888;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>🔐 Wallet Checker</h1>
-    <button onclick="showBalance()">Check Balance</button>
-    <div id="balanceOutput"></div>
+  <div class="card">
+    <h2>🔐 JARVINO Wallet</h2>
+    <div class="balance" id="balanceDisplay">Loading...</div>
+    <button class="copy-btn" onclick="copyBalance()">📋 Copy Balance</button>
+    <div class="footer">Powered by Jarvino-BOT</div>
   </div>
 
   <script>
-    // Default balance data (static for now)
-    const balance = 125.50;
-    const coin = "TON";
+    const params = new URLSearchParams(window.location.search);
+    const balance = params.get("bal");
+    const coin = params.get("coin")?.toUpperCase() || "TON";
+    const display = document.getElementById("balanceDisplay");
 
-    function showBalance() {
-      document.getElementById("balanceOutput").innerHTML =
-        `💰 <strong>${balance}</strong> ${coin}`;
+    if (balance && coin) {
+      let logo = "";
+      if (coin === "TON") logo = "https://cryptologos.cc/logos/toncoin-ton-logo.png?v=026";
+      if (coin === "USDT") logo = "https://cryptologos.cc/logos/tether-usdt-logo.png?v=026";
+      if (coin === "DOGS") logo = "https://cdn-icons-png.flaticon.com/512/616/616408.png";
+
+      display.innerHTML = `
+        <img src="${logo}" alt="${coin}" class="coin-logo">
+        <strong>${balance}</strong> ${coin}
+      `;
+    } else {
+      display.innerHTML = "⚠️ No balance info provided.";
     }
 
-    // 🔁 Optional: Use ?bal=...&coin=... from URL
-    // Example: https://yourdomain.github.io/?bal=50&coin=USDT
-    const params = new URLSearchParams(window.location.search);
-    const urlBalance = params.get("bal");
-    const urlCoin = params.get("coin");
-
-    if (urlBalance && urlCoin) {
-      document.getElementById("balanceOutput").innerHTML =
-        `💰 <strong>${urlBalance}</strong> ${urlCoin}`;
+    function copyBalance() {
+      navigator.clipboard.writeText(`${balance} ${coin}`).then(() => {
+        alert("Balance copied!");
+      });
     }
   </script>
 
