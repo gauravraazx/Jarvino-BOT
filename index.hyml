@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wallet Balance</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 25px;
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0077cc;
+    }
+
+    #balanceOutput {
+      margin-top: 25px;
+      font-size: 20px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔐 Wallet Checker</h1>
+    <button onclick="showBalance()">Check Balance</button>
+    <div id="balanceOutput"></div>
+  </div>
+
+  <script>
+    // Default balance data (static for now)
+    const balance = 125.50;
+    const coin = "TON";
+
+    function showBalance() {
+      document.getElementById("balanceOutput").innerHTML =
+        `💰 <strong>${balance}</strong> ${coin}`;
+    }
+
+    // 🔁 Optional: Use ?bal=...&coin=... from URL
+    // Example: https://yourdomain.github.io/?bal=50&coin=USDT
+    const params = new URLSearchParams(window.location.search);
+    const urlBalance = params.get("bal");
+    const urlCoin = params.get("coin");
+
+    if (urlBalance && urlCoin) {
+      document.getElementById("balanceOutput").innerHTML =
+        `💰 <strong>${urlBalance}</strong> ${urlCoin}`;
+    }
+  </script>
+
+</body>
+</html>
